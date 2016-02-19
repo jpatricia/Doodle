@@ -16,7 +16,7 @@ public class Draw extends JPanel{
     public Color color;
     public BasicStroke stroke;
     public ArrayList<Point> points = new ArrayList<Point>();
-    public ArrayList<Integer> indexEnd = new ArrayList<Integer>();
+    public ArrayList<Point> hm = new ArrayList<Point>();
     public ArrayList<Color> colorTable = new ArrayList<Color>();
     public ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
 
@@ -24,6 +24,7 @@ public class Draw extends JPanel{
         p = c;
         color = color_;
         stroke = stroke_;
+
         System.out.println("Draw Constructor");
         System.out.println("stroke: "+stroke.getLineWidth());
         this.addMouseListener(new MouseAdapter() {
@@ -36,28 +37,32 @@ public class Draw extends JPanel{
 
                 strokeTable.add(stroke);
                 colorTable.add(color);
-                repaint();
+
+                points.add(me.getPoint());
+                hm.add(me.getPoint());
+               // repaint();
             }
         });
 
         this.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent me) {
+               // repaint();
 
-                indexEnd.add(points.size()-1);
-                index = 0;
-                repaint();
+              //  hm.put(me.getPoint(), new Boolean(true));
+              //  indexEnd.add(points.size()-1);
+                // index = 0;
+
             }
         });
 
         this.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseDragged(MouseEvent me){
-//                Graphics g = getGraphics();
-//
-//                x2 = me.getX();
-//                y2 = me.getY();
                 points.add(me.getPoint());
                 repaint();
 
+//                Graphics g = getGraphics();
+//                x2 = me.getX();
+//                y2 = me.getY();
 //                x2 = me.getX();
 //                y2 = me.getY();
 //                if(g2 !=null){
@@ -83,33 +88,57 @@ public class Draw extends JPanel{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2_ = (Graphics2D)g;
-        int w = p.getWidth();
-        int h = p.getHeight();
-
-
+        int i=0;
 
         g2_.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-//        if(indexEnd.size()!=0){
-            for(int i=0;i<indexEnd.size();i++) {
-                g2_.setStroke(strokeTable.get(i));
-                g2_.setPaint(colorTable.get(i));
-                for (int j = index; j < indexEnd.get(i) - 1; j++) {
-                    Point p1 = points.get(j);
-                    Point p2 = points.get(j + 1);
-                    g2_.drawLine(p1.x, p1.y, p2.x, p2.y);
-                }
-                index = indexEnd.get(i) + 1;
+        for(int j=0;j<=points.size()-2;j++) {
+            Point p1 = points.get(j);
+            Point p2 = points.get(j + 1);
+            g2_.setStroke(strokeTable.get(i));
+            g2_.setPaint(colorTable.get(i));
+            if(hm.contains(p2)){ //p2 is a new line
+                i++;
+            }else{
+                g2_.drawLine(p1.x,p1.y,p2.x,p2.y);
             }
+        }
+
+//        if(startPoint.size()!=0) {
+//            for (int i = 0; i < startPoint.size(); i++) {
+//                g2_.setStroke(strokeTable.get(i));
+//                g2_.setPaint(colorTable.get(i));
+//                for (int j = index; j < startPoint.get(i) - 2; j++) {
+//                    Point p1 = points.get(j);
+//                    Point p2 = points.get(j + 1);
+//                    g2_.drawLine(p1.x, p1.y, p2.x, p2.y);
+//                }
+//                index = startPoint.get(i);
 //            }
-//        }else{
-//            for(int j=index;j<points.size()-2;j++){
+//        }
+
+//        if(indexEnd.size()!=0){
+//            for(int i=0;i<indexEnd.size();i++) {
+//                g2_.setStroke(strokeTable.get(i));
+//                g2_.setPaint(colorTable.get(i));
+//                for (int j = index; j < indexEnd.get(i) - 1; j++) {
+//                    Point p1 = points.get(j);
+//                    Point p2 = points.get(j + 1);
+//                    g2_.drawLine(p1.x, p1.y, p2.x, p2.y);
+//                }
+//                index = indexEnd.get(i) + 1;
+//            }
+//            }
+//        }
+//          else{
+//            for(int j=0;j<points.size()-2;j++){
 //                Point p1 = points.get(j);
 //                Point p2 = points.get(j+1);
 //                g2_.drawLine(p1.x,p1.y,p2.x,p2.y);
+//
 //            }
-        //}
+//          }
 
 
 //        System.out.println("p.getWidth: "+w);
