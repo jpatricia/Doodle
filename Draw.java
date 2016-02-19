@@ -19,6 +19,7 @@ public class Draw extends JPanel{
         p = c;
         stroke = stroke_;
         System.out.println("Draw Constructor");
+        System.out.println("stroke: "+stroke.getLineWidth());
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
                 x1 = me.getX();
@@ -79,12 +80,9 @@ public class Draw extends JPanel{
         g.drawImage(img, 0, 0, null);
     }
 
-    public void changeStroke(BasicStroke st){
-        System.out.println("changeStroke");
-        stroke = st;
-        System.out.println(stroke.getLineWidth());
-        repaint();
-       // stroke = new BasicStroke(1);
-//       repaint();
-    }
+//    public void changeStroke(BasicStroke st){
+//        System.out.println("changeStroke");
+//        stroke = st;
+//        System.out.println(stroke.getLineWidth());
+//    }
 }

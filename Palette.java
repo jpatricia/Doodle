@@ -32,8 +32,10 @@ public class Palette extends JPanel implements Observer{
         StrokePalette();
 
         //nested layout
-        p.add(pTop,BorderLayout.NORTH);
-        p.add(pBottom,BorderLayout.SOUTH);
+        model.addColorPalette(p,pTop);
+        model.addStrokePalette(p,pBottom);
+//        p.add(pTop,BorderLayout.NORTH);
+//        p.add(pBottom,BorderLayout.SOUTH);
         this.add(p); //put back layout to frame
 
         this.setBackground(Color.LIGHT_GRAY);

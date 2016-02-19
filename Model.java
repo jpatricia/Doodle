@@ -48,7 +48,21 @@ public class Model extends Observable {
         p.setOpaque(true);
     }
 
-    public void changeStroke(BasicStroke st){
+    public void addColorPalette(JPanel p_,JPanel pt){
+        p=p_;
+        p.add(pt, BorderLayout.NORTH);
+        p.setOpaque(true);
+    }
 
+    public void addStrokePalette(JPanel p_,JPanel pb){
+        p=p_;
+        p.add(pb, BorderLayout.SOUTH);
+        p.setOpaque(true);
+    }
+
+    public void changeStroke(BasicStroke st){
+        System.out.println("st: "+st.getLineWidth());
+        dr.stroke = st;
+        System.out.println("st: "+dr.stroke.getLineWidth());
     }
 }
