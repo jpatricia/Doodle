@@ -65,4 +65,8 @@ public class Model extends Observable {
         dr.stroke = st;
         System.out.println("st: "+dr.stroke.getLineWidth());
     }
+
+    public void changeColor(Color col){
+        dr.color = col;
+    }
 }

@@ -58,6 +58,68 @@ public class Palette extends JPanel implements Observer{
         JButton twelve = new JButton();
         JButton choose = new JButton("Choose Color");
 
+        one.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.BLACK);
+            }
+        });
+        two.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.WHITE);
+            }
+        });
+        three.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.LIGHT_GRAY);
+            }
+        });
+        four.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.DARK_GRAY);
+            }
+        });
+        five.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.BLUE);
+            }
+        });
+        six.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.CYAN);
+            }
+        });
+        seven.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.GREEN);
+            }
+        });
+        eight.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.YELLOW);
+            }
+        });
+        nine.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.ORANGE);
+            }
+        });
+        ten.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.MAGENTA);
+            }
+        });
+        eleven.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.PINK);
+            }
+        });
+        twelve.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.changeColor(Color.RED);
+            }
+        });
+
+
         one.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
         two.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,1));
         three.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));

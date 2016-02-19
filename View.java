@@ -17,7 +17,7 @@ class View extends JPanel implements Observer {
         ////////// MENU BAR //////////
         f = new JFrame("Doodle"); //create a window
         f.getContentPane().setLayout(new BorderLayout());
-        f.setSize(1300,860);
+        f.setSize(800,600);
 
         //Set menu bar
         jmb = MenuBar();

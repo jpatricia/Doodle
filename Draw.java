@@ -3,20 +3,26 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Draw extends JPanel{
     //x1,y1 is the old coordinate
     //x2,y2 is the current coordinate
     //Image img;
-    private Graphics2D g2;
+  //  private Graphics2D g2;
+    //  public BufferedImage img;
     private JPanel p;
-    int x1,y1,x2,y2;
-    public BufferedImage img;
+    int x1,y1,x2,y2,x3,y3,index=0;
+    public Color color;
     public BasicStroke stroke;
+    public ArrayList<Point> points = new ArrayList<Point>();
+    public ArrayList<Integer> indexEnd = new ArrayList<Integer>();
+    public ArrayList<Color> colorTable = new ArrayList<Color>();
+    public ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
 
     public Draw(JPanel c,Color color_,BasicStroke stroke_){ //constructor
         p = c;
+        color = color_;
         stroke = stroke_;
         System.out.println("Draw Constructor");
         System.out.println("stroke: "+stroke.getLineWidth());
@@ -25,20 +31,41 @@ public class Draw extends JPanel{
                 x1 = me.getX();
                 y1 = me.getY();
 
-                g2.setStroke(stroke);
+                x2 = x1;
+                y2 = y1;
+
+                strokeTable.add(stroke);
+                colorTable.add(color);
+                repaint();
+            }
+        });
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent me) {
+
+                indexEnd.add(points.size()-1);
+                index = 0;
+                repaint();
             }
         });
 
         this.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseDragged(MouseEvent me){
-                x2 = me.getX();
-                y2 = me.getY();
-                if(g2 !=null){
-                    g2.drawLine(x1,y1,x2,y2);
-                }
+//                Graphics g = getGraphics();
+//
+//                x2 = me.getX();
+//                y2 = me.getY();
+                points.add(me.getPoint());
                 repaint();
-                x1 = x2;
-                y1 = y2;
+
+//                x2 = me.getX();
+//                y2 = me.getY();
+//                if(g2 !=null){
+//                    g2.drawLine(x1,y1,x2,y2);
+//                }
+//                repaint();
+//                x1 = x2;
+//                y1 = y2;
             }
         });
     }
@@ -55,29 +82,57 @@ public class Draw extends JPanel{
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2_ = (Graphics2D)g;
         int w = p.getWidth();
         int h = p.getHeight();
+
+
+
+        g2_.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+//        if(indexEnd.size()!=0){
+            for(int i=0;i<indexEnd.size();i++) {
+                g2_.setStroke(strokeTable.get(i));
+                g2_.setPaint(colorTable.get(i));
+                for (int j = index; j < indexEnd.get(i) - 1; j++) {
+                    Point p1 = points.get(j);
+                    Point p2 = points.get(j + 1);
+                    g2_.drawLine(p1.x, p1.y, p2.x, p2.y);
+                }
+                index = indexEnd.get(i) + 1;
+            }
+//            }
+//        }else{
+//            for(int j=index;j<points.size()-2;j++){
+//                Point p1 = points.get(j);
+//                Point p2 = points.get(j+1);
+//                g2_.drawLine(p1.x,p1.y,p2.x,p2.y);
+//            }
+        //}
+
+
 //        System.out.println("p.getWidth: "+w);
 //        System.out.println("p.getHeight: "+h);
 
-        if (img == null) {
-            System.out.println("null fcn");
-            // img = createImage(w,h);
-            img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-            g2 = (Graphics2D) img.getGraphics();
-            g2.setPaint(Color.BLACK); //default
-            if (stroke == null) stroke = new BasicStroke(1);
-            g2.setStroke(stroke);
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        } else {
-            System.out.println("not null");
-            g2 = (Graphics2D) img.getGraphics();
-            g2.setPaint(Color.BLACK); //default
-            System.out.println("ttttttt"+stroke.getLineWidth());
-            g2.setStroke(stroke);
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        g.drawImage(img, 0, 0, null);
+//        if (img == null) {
+//            System.out.println("null fcn");
+//            // img = createImage(w,h);
+//            img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+//            g2 = (Graphics2D) img.getGraphics();
+//            g2.setPaint(Color.BLACK); //default
+//            if (stroke == null) stroke = new BasicStroke(1);
+//            g2.setStroke(stroke);
+//            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        } else {
+//            System.out.println("not null");
+//            g2 = (Graphics2D) img.getGraphics();
+//            g2.setPaint(Color.BLACK); //default
+//            System.out.println("ttttttt"+stroke.getLineWidth());
+//            g2.setStroke(stroke);
+//            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//        }
+//        g.drawImage(img, 0, 0, null);
     }
 
 //    public void changeStroke(BasicStroke st){
