@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -7,10 +9,15 @@ public class Palette extends JPanel implements Observer{
 
     private Model model;
     private JPanel pTop;
+    private JPanel vi;
     private JPanel pBottom;
+    private Draw draw_;
 
-    public Palette(Model model_){
+    public Palette(Model model_,JPanel v){
         model = model_;
+        vi = v;
+
+        draw_ = new Draw(vi,Color.BLACK,new BasicStroke(1));
 
         JPanel p = new JPanel();
         pTop = new JPanel();
@@ -33,20 +40,21 @@ public class Palette extends JPanel implements Observer{
         System.out.println("Palette");
     }
 
+
     void colorPalette(){
-        JLabel one = new JLabel("ABCDE");
-        JLabel two = new JLabel("ABCDE");
-        JLabel three = new JLabel("ABCDE");
-        JLabel four = new JLabel("ABCDE");
-        JLabel five = new JLabel("ABCDE");
-        JLabel six = new JLabel("ABCDE");
-        JLabel seven = new JLabel("ABCDE");
-        JLabel eight = new JLabel("ABCDE");
-        JLabel nine = new JLabel("ABCDE");
-        JLabel ten = new JLabel("ABCDE");
-        JLabel eleven = new JLabel("ABCDE");
-        JLabel twelve = new JLabel("ABCDE");
-        JLabel choose = new JLabel("Choose Color");
+        JButton one = new JButton();
+        JButton two = new JButton();
+        JButton three = new JButton();
+        JButton four = new JButton();
+        JButton five = new JButton();
+        JButton six = new JButton();
+        JButton seven = new JButton();
+        JButton eight = new JButton();
+        JButton nine = new JButton();
+        JButton ten = new JButton();
+        JButton eleven = new JButton();
+        JButton twelve = new JButton();
+        JButton choose = new JButton("Choose Color");
 
         one.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
         two.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,1));
@@ -66,8 +74,8 @@ public class Palette extends JPanel implements Observer{
         //Set the color for each color palette
         one.setBackground(Color.BLACK);
         two.setBackground(Color.WHITE);
-        three.setBackground(Color.DARK_GRAY);
-        four.setBackground(Color.LIGHT_GRAY);
+        three.setBackground(Color.LIGHT_GRAY);
+        four.setBackground(Color.DARK_GRAY);
         five.setBackground(Color.BLUE);
         six.setBackground(Color.CYAN);
         seven.setBackground(Color.GREEN);
@@ -78,18 +86,18 @@ public class Palette extends JPanel implements Observer{
         twelve.setBackground(Color.RED);
         choose.setBackground(Color.LIGHT_GRAY);
 
-        one.setForeground(Color.BLACK);
-        two.setForeground(Color.WHITE);
-        three.setForeground(Color.DARK_GRAY);
-        four.setForeground(Color.LIGHT_GRAY);
-        five.setForeground(Color.BLUE);
-        six.setForeground(Color.CYAN);
-        seven.setForeground(Color.GREEN);
-        eight.setForeground(Color.YELLOW);
-        nine.setForeground(Color.ORANGE);
-        ten.setForeground(Color.MAGENTA);
-        eleven.setForeground(Color.PINK);
-        twelve.setForeground(Color.RED);
+//        one.setForeground(Color.BLACK);
+//        two.setForeground(Color.WHITE);
+//        three.setForeground(Color.DARK_GRAY);
+//        four.setForeground(Color.LIGHT_GRAY);
+//        five.setForeground(Color.BLUE);
+//        six.setForeground(Color.CYAN);
+//        seven.setForeground(Color.GREEN);
+//        eight.setForeground(Color.YELLOW);
+//        nine.setForeground(Color.ORANGE);
+//        ten.setForeground(Color.MAGENTA);
+//        eleven.setForeground(Color.PINK);
+//        twelve.setForeground(Color.RED);
         choose.setForeground(Color.BLACK);
 
         //make the background shown
@@ -106,6 +114,7 @@ public class Palette extends JPanel implements Observer{
         eleven.setOpaque(true);
         twelve.setOpaque(true);
         choose.setOpaque(true);
+
 
         // Add the components.
         pTop.add(one);
@@ -131,6 +140,28 @@ public class Palette extends JPanel implements Observer{
         JButton c = new JButton();
         JButton d = new JButton();
 
+        a.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                model.changeStroke(new BasicStroke(1));
+            }
+        });
+
+        b.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                model.changeStroke(new BasicStroke(3));
+            }
+        });
+        c.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                model.changeStroke(new BasicStroke(5));
+            }
+        });
+        d.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                model.changeStroke(new BasicStroke(8));
+            }
+        });
+
         a.setIcon(new ImageIcon("line1.GIF"));
         b.setIcon(new ImageIcon("line2.GIF"));
         c.setIcon(new ImageIcon("line3.GIF"));
@@ -151,10 +182,12 @@ public class Palette extends JPanel implements Observer{
         c.setOpaque(true);
         d.setOpaque(true);
 
+
         pBottom.add(a);
         pBottom.add(b);
         pBottom.add(c);
         pBottom.add(d);
+
 
         //        pBottom.add(new JComponent() {
 //            public void paintComponent(Graphics g){

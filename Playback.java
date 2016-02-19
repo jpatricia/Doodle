@@ -8,7 +8,7 @@ public class Playback extends JPanel implements Observer{
     private Model model;
     private JFrame f;
 
-    public Playback(Model model_){
+    public Playback(Model model_,JPanel vw){
         model = model_;
 
 //        this.setLayout(new FlowLayout());

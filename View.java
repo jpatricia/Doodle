@@ -12,14 +12,12 @@ class View extends JPanel implements Observer {
 
         JMenuBar jmb;
         JPanel p = new JPanel(new BorderLayout());
-        Canvas c = new Canvas(model);
-        Palette pal = new Palette(model);
-        Playback pc = new Playback(model);
+
 
         ////////// MENU BAR //////////
         f = new JFrame("Doodle"); //create a window
         f.getContentPane().setLayout(new BorderLayout());
-        f.setSize(800,600);
+        f.setSize(1300,860);
 
         //Set menu bar
         jmb = MenuBar();
@@ -28,14 +26,10 @@ class View extends JPanel implements Observer {
         p.setOpaque(true);
         f.getContentPane().add(p);
 
-        //add canvas
-        p.add(c,BorderLayout.CENTER);
-
-        //add palette
-        p.add(pal,BorderLayout.WEST);
-
-        //add playback control
-        p.add(pc,BorderLayout.SOUTH);
+        //add canvas, palette, and playback
+        model.addCanvas(p);
+        model.addPalette(p);
+        model.addPlayback(p);
 
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
