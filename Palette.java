@@ -118,6 +118,11 @@ public class Palette extends JPanel implements Observer{
                 model.changeColor(Color.RED);
             }
         });
+        choose.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.colorChooser();
+            }
+        });
 
 
         one.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));

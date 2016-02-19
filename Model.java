@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 
-public class Model extends Observable {
+public class Model extends Observable{
     Canvas c;
     Palette pal;
     Playback pc;
@@ -61,12 +61,25 @@ public class Model extends Observable {
     }
 
     public void changeStroke(BasicStroke st){
-        System.out.println("st: "+st.getLineWidth());
+        System.out.println("changeStroke");
         dr.stroke = st;
-        System.out.println("st: "+dr.stroke.getLineWidth());
+        System.out.println("curStroke: "+dr.stroke.getLineWidth());
     }
 
     public void changeColor(Color col){
+        System.out.println("changeColor");
         dr.color = col;
+        System.out.println("curColor: "+dr.color);
     }
+
+    public void colorChooser(){
+        System.out.println("Color chooser");
+        Color colorChoose = Color.BLACK;
+        colorChoose = JColorChooser.showDialog(p,"Pick a Color",colorChoose);
+        if(colorChoose == null) colorChoose = Color.BLACK;
+        dr.color = colorChoose;
+        System.out.println("curColor: "+dr.color);
+        p.setOpaque(true);
+    }
+
 }
