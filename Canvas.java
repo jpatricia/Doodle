@@ -44,10 +44,15 @@ class Canvas extends JPanel{
         Graphics2D g2_ = (Graphics2D) g;
         int i = 0;
 
-        ArrayList<Point> points = model.getPointsList();
-        ArrayList<Point> hm = model.getCheckStart();
-        ArrayList<Color> colorTable = model.getColor();
-        ArrayList<BasicStroke> strokeTable = model.getStroke();
+        ArrayList<Point> points = new ArrayList<Point>();
+        ArrayList<Point> hm = new ArrayList<Point>();
+        ArrayList<Color> colorTable = new ArrayList<Color>();
+        ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
+
+        points = model.getPointsList();
+        hm = model.getCheckStart();
+        colorTable = model.getColor();
+        strokeTable = model.getStroke();
 
 
         g2_.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
