@@ -11,13 +11,10 @@ public class Palette extends JPanel implements Observer{
     private JPanel pTop;
     private JPanel vi;
     private JPanel pBottom;
-    private Draw draw_;
+//    private Draw draw_;
 
-    public Palette(Model model_,JPanel v){
+    public Palette(Model model_){
         model = model_;
-        vi = v;
-
-        draw_ = new Draw(vi,Color.BLACK,new BasicStroke(1));
 
         JPanel p = new JPanel();
         pTop = new JPanel();
@@ -32,15 +29,42 @@ public class Palette extends JPanel implements Observer{
         StrokePalette();
 
         //nested layout
-        model.addColorPalette(p,pTop);
-        model.addStrokePalette(p,pBottom);
-//        p.add(pTop,BorderLayout.NORTH);
-//        p.add(pBottom,BorderLayout.SOUTH);
+        p.add(pTop,BorderLayout.NORTH);
+        p.add(pBottom,BorderLayout.SOUTH);
         this.add(p); //put back layout to frame
 
         this.setBackground(Color.LIGHT_GRAY);
         System.out.println("Palette");
     }
+
+//    public Palette(Model model_,JPanel v){
+//        model = model_;
+//        vi = v;
+//
+//        draw_ = new Draw(vi,Color.BLACK,new BasicStroke(1),model);
+//
+//        JPanel p = new JPanel();
+//        pTop = new JPanel();
+//        pBottom = new JPanel();
+//
+//        // Set the layout strategy to a grid with 2 rows and 3 columns.
+//        p.setLayout(new BorderLayout());
+//        pTop.setLayout(new GridLayout(8, 2)); //color palette
+//        pBottom.setLayout(new GridLayout(5,1)); //stroke palette
+//
+//        colorPalette();
+//        StrokePalette();
+//
+//        //nested layout
+//        model.addColorPalette(p,pTop);
+//        model.addStrokePalette(p,pBottom);
+////        p.add(pTop,BorderLayout.NORTH);
+////        p.add(pBottom,BorderLayout.SOUTH);
+//        this.add(p); //put back layout to frame
+//
+//        this.setBackground(Color.LIGHT_GRAY);
+//        System.out.println("Palette");
+//    }
 
 
     void colorPalette(){
