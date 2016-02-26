@@ -11,6 +11,7 @@ public class Palette extends JPanel implements Observer{
     private JPanel pTop;
     private JPanel vi;
     private JPanel pBottom;
+    private JButton choose;
 //    private Draw draw_;
 
     public Palette(Model model_){
@@ -80,7 +81,7 @@ public class Palette extends JPanel implements Observer{
         JButton ten = new JButton();
         JButton eleven = new JButton();
         JButton twelve = new JButton();
-        JButton choose = new JButton("Choose Color");
+        choose = new JButton("Choose Color");
 
         one.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -346,6 +347,14 @@ public class Palette extends JPanel implements Observer{
 
     @Override //update the view by repainting the canvas
     public void update(Observable arg0, Object arg1){
-        repaint();
+        System.out.println("update palette");
+
+//        if(model.chooseCol){ //never set up color
+//            System.out.println("color chosen: "+model.curColor);
+//            choose.setBackground(model.curColor);
+//            choose.setOpaque(true);
+//            pTop.add(choose);
+//            repaint();
+//        }
     }
 }

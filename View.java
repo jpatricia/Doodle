@@ -1,20 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Observable;
-import java.util.Observer;
 
-class View extends JPanel implements Observer {
+class View extends JPanel{
     private Model model;
     private JFrame f;
+    public Canvas c;
+    public Palette pal;
+    public Playback pc;
 
     public View(Model model_){
         model = model_;
 
         JMenuBar jmb;
         JPanel p = new JPanel(new BorderLayout());
-        Canvas c = new Canvas(model);
-        Palette pal = new Palette(model);
-        Playback pc = new Playback(model);
+        c = new Canvas(model);
+        pal = new Palette(model);
+        pc = new Playback(model);
 
 
         ////////// MENU BAR //////////
@@ -75,9 +76,10 @@ class View extends JPanel implements Observer {
     }
 
 
-    @Override //update the view by repainting the canvas
-    public void update(Observable arg0, Object arg1){
-        repaint();
-    }
+//    @Override //update the view by repainting the canvas
+//    public void update(Observable arg0, Object arg1){
+//        System.out.println("update view");
+//        repaint();
+//    }
 
 }

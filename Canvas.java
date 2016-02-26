@@ -4,8 +4,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-class Canvas extends JPanel{
+class Canvas extends JPanel implements Observer {
     private Model model;
 
     public Canvas(Model model_) {
@@ -14,8 +16,10 @@ class Canvas extends JPanel{
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
 
-                System.out.println("curColor1: "+model.curColor);
-                System.out.println("curStroke1: "+model.curStroke);
+                System.out.println("mouse pressed");
+//                System.out.println("curColor1: "+model.curColor);
+//                System.out.println("curStroke1: "+model.curStroke);
+
                 //add color and stroke to table
                 model.addStroke(model.curStroke);
                 model.addColor(model.curColor);
@@ -31,6 +35,14 @@ class Canvas extends JPanel{
                 //add point to the table
                 model.addPoints(me.getPoint());
                 repaint();
+            }
+        });
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("mouse released");
+                model.addTick();
+                model.markEndLine();
             }
         });
 
@@ -70,6 +82,12 @@ class Canvas extends JPanel{
             }
         }
 
+    }
+
+    @Override //update the view by repainting the canvas
+    public void update(Observable arg0, Object arg1){
+        System.out.println("update canvas");
+        repaint();
     }
 
 }

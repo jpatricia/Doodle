@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -9,12 +11,18 @@ public class Model extends Observable{
     Playback pc;
     Color curColor;
     BasicStroke curStroke;
+    Timer timer;
+    private int counter=0;
+    boolean maxTick = true; //to see if it's on the maximum tick of jslider or not
+ //   Boolean chooseCol = false;
  //   Draw dr;
     //JPanel p;
     public ArrayList<Point> points = new ArrayList<Point>();
     public ArrayList<Point> hm = new ArrayList<Point>();
     public ArrayList<Color> colorTable = new ArrayList<Color>();
     public ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
+    public ArrayList<Point> completePoints = new ArrayList<Point>();
+    public ArrayList<Integer> endLineIndex = new ArrayList<Integer>();
 
     public Model(){
         c = new Canvas(this);
@@ -22,6 +30,8 @@ public class Model extends Observable{
         pc = new Playback(this);
         curColor = Color.BLACK; //default
         curStroke = new BasicStroke(1);
+        setChanged();
+        timer = new Timer((15),timerListener);
 //        p = new JPanel();
 //        p.setLayout(new BorderLayout());
 //        c = new Canvas(this,p);
@@ -72,19 +82,29 @@ public class Model extends Observable{
 //        p.setOpaque(true);
 //    }
 
+    public void start(){
+        //start the timer
+        System.out.println("///////Start timer///////");
+        timer.start();
+        counter = 0;
+    }
+
     public void changeStroke(BasicStroke st){
+        //this method sets the stroke based on the button clicked
         System.out.println("changeStroke");
         curStroke = st;
         System.out.println("curStroke: "+curStroke.getLineWidth());
     }
 
     public void changeColor(Color col){
+        //this method sets the value of current color based on button clicked
         System.out.println("changeColor");
         curColor = col;
         System.out.println("curColor: "+curColor);
     }
 
     public void colorChooser(){
+        //this method is for the color choose dialog
         System.out.println("Color chooser");
         Color colorChoose = Color.BLACK;
         colorChoose = JColorChooser.showDialog(c,"Pick a Color",colorChoose);
@@ -92,26 +112,40 @@ public class Model extends Observable{
         curColor = colorChoose;
         System.out.println("curColor: "+curColor);
 //        p.setOpaque(true);
+
+//        chooseCol = true;
+//        setChanged();
+//        notifyObservers();
     }
 
     public void addColor(Color newColor){
-        System.out.println("addColor: "+newColor);
+        //this method will store the current color information
+        //System.out.println("addColor: "+newColor);
         colorTable.add(newColor);
     }
 
     public void addStroke(BasicStroke newStroke){
-        System.out.println("addStroke: "+newStroke);
+        //this method will store the current stroke thickness information
+       // System.out.println("addStroke: "+newStroke);
         strokeTable.add(newStroke);
     }
 
     public void addPoints(Point newPoint){
-        System.out.println("addPoints: "+newPoint);
+        //this method will add points to array when drawing
+        //System.out.println("addPoints: "+newPoint);
         points.add(newPoint);
+        completePoints.add(newPoint);
     }
 
     public void addCheckStart(Point newPoint){
-        System.out.println("addCheckStart: "+newPoint);
+        //this has the point of the start of a new line
+       // System.out.println("addCheckStart: "+newPoint);
         hm.add(newPoint);
+    }
+
+    public void markEndLine(){
+        //This has the index of the end of each line at completePoints array
+        endLineIndex.add(points.size()-1);
     }
 
     public ArrayList getPointsList(){
@@ -129,5 +163,74 @@ public class Model extends Observable{
     public ArrayList getCheckStart(){
         return hm;
     }
+
+    public void addTick(){
+        System.out.println("addtick function");
+        setChanged();
+        notifyObservers();
+    }
+
+    public void getDrawing(int sliderValue){
+        System.out.println("sliderValue: "+sliderValue);
+
+        points.clear();
+        int space = 100/hm.size();
+        int lineNum = sliderValue/space;
+        int i=0;
+
+        if(lineNum < hm.size()) maxTick = false;
+        else maxTick=true;
+
+        System.out.println("space: "+space);
+        System.out.println("lineNum: "+lineNum);
+
+        if(lineNum>0 && lineNum <hm.size()){
+            System.out.println("lineNum not 0 and max: "+lineNum);
+            while(i < endLineIndex.get(lineNum-1)){
+                points.add(completePoints.get(i));
+                i++;
+            }
+            //Point endLine = hm.get(lineNum);
+            //System.out.println("endLine: "+endLine);
+
+//            while(completePoints.get(i) != endLine){
+//                points.add(completePoints.get(i));
+//                i++;
+//            }
+
+//            for(int i=0;i<completePoints.size();i++){
+//                if(completePoints.get(i) != endLine){
+//                    points.add(completePoints.get(i));
+//                }
+//            }
+        }else if (lineNum==0){
+            System.out.println("lineNum is zero");
+        }
+        else if(lineNum == hm.size()){
+            System.out.println("lineNum is maximum: "+hm.size());
+            for(int j=0;j<completePoints.size();j++){
+                points.add(completePoints.get(j));
+            }
+
+        }
+
+        setChanged();
+        notifyObservers();
+
+    }
+
+    ActionListener timerListener = new ActionListener(){
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("timer action performed");
+            if(counter < completePoints.size()){
+                System.out.println("counter: "+counter);
+                points.add(completePoints.get(counter));
+                counter++;
+            }else{
+                timer.stop();
+            }
+            setChanged();
+            notifyObservers();
+        }};
 
 }
