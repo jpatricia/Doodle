@@ -37,6 +37,22 @@ public class Playback extends JPanel implements Observer{
             }
         });
 
+        Start.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("start button");
+                slider.setValue(0);
+                model.curSliderValue = 0;
+            }
+        });
+
+        End.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("end button");
+                slider.setValue(100);
+                model.curSliderValue = 100;
+            }
+        });
+
         addComponents();
 
         this.setBackground(Color.LIGHT_GRAY);
@@ -86,12 +102,13 @@ public class Playback extends JPanel implements Observer{
             System.out.println("here");
             int mult = model.hm.size();
             int tickspace = 100/mult;
-            slider.setMaximum(mult*tickspace);
+            slider.setMaximum(100);
             slider.setMajorTickSpacing(tickspace);
-            slider.setSnapToTicks(true);
+           // slider.setSnapToTicks(true);
             slider.setPaintTicks(true);
             if(model.maxTick){
-                slider.setValue(mult*tickspace);
+                slider.setValue(100);
+                model.curSliderValue = 100;
             }
         }
 
@@ -101,19 +118,13 @@ public class Playback extends JPanel implements Observer{
 
         public void stateChanged(ChangeEvent e) {
             Object obj = e.getSource();
-            if(obj instanceof BoundedRangeModel){
-                BoundedRangeModel range = (BoundedRangeModel) obj;
-                if(!range.getValueIsAdjusting()){
-                    System.out.println("Changed: "+ range.getValue());
-                }
-            }else if(obj instanceof JSlider){
+            if(obj instanceof JSlider){
                 JSlider jslider = (JSlider) obj;
                 if(!jslider.getValueIsAdjusting()){
                     model.getDrawing(jslider.getValue());
+                    model.curSliderValue = jslider.getValue();
                     System.out.println("Slider changed: "+jslider.getValue());
                 }
-            }else{
-                System.out.println("Something changed");
             }
 
         }

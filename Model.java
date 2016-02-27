@@ -12,6 +12,7 @@ public class Model extends Observable{
     Color curColor;
     BasicStroke curStroke;
     Timer timer;
+    int curSliderValue=100; //for play button timer
     private int counter=0;
     boolean maxTick = true; //to see if it's on the maximum tick of jslider or not
  //   Boolean chooseCol = false;
@@ -133,8 +134,10 @@ public class Model extends Observable{
     public void addPoints(Point newPoint){
         //this method will add points to array when drawing
         //System.out.println("addPoints: "+newPoint);
+
         points.add(newPoint);
         completePoints.add(newPoint);
+
     }
 
     public void addCheckStart(Point newPoint){
@@ -178,20 +181,25 @@ public class Model extends Observable{
         int lineNum = sliderValue/space;
         int i=0;
 
+
         if(lineNum < hm.size()) maxTick = false;
         else maxTick=true;
 
         System.out.println("space: "+space);
         System.out.println("lineNum: "+lineNum);
 
-        if(lineNum>0 && lineNum <hm.size()){
-            System.out.println("lineNum not 0 and max: "+lineNum);
-            while(i < endLineIndex.get(lineNum-1)){
-                points.add(completePoints.get(i));
-                i++;
-            }
-            //Point endLine = hm.get(lineNum);
-            //System.out.println("endLine: "+endLine);
+        if(sliderValue%space ==0 || sliderValue ==100){
+            //the arrow is on the tick
+            System.out.println("arrow is on the tick");
+
+            if(lineNum>0 && lineNum <hm.size()){
+                System.out.println("lineNum not 0 and max: "+lineNum);
+                while(i < endLineIndex.get(lineNum-1)){
+                    points.add(completePoints.get(i));
+                    i++;
+                }
+                //Point endLine = hm.get(lineNum);
+                //System.out.println("endLine: "+endLine);
 
 //            while(completePoints.get(i) != endLine){
 //                points.add(completePoints.get(i));
@@ -203,16 +211,43 @@ public class Model extends Observable{
 //                    points.add(completePoints.get(i));
 //                }
 //            }
-        }else if (lineNum==0){
-            System.out.println("lineNum is zero");
-        }
-        else if(lineNum == hm.size()){
-            System.out.println("lineNum is maximum: "+hm.size());
-            for(int j=0;j<completePoints.size();j++){
-                points.add(completePoints.get(j));
+            }else if (lineNum==0){
+                System.out.println("lineNum is zero");
+            }
+            else if(lineNum == hm.size() || sliderValue ==100){
+                System.out.println("lineNum is maximum: "+hm.size());
+                for(int j=0;j<completePoints.size();j++){
+                    points.add(completePoints.get(j));
+                }
+
             }
 
+        }else{
+            //the arrow is between two ticks
+            System.out.println("arrow is in the middle of two ticks");
+            int NumOfPoints;
+            int tickIndex;
+            int remainder;
+
+            if(sliderValue<space){
+                NumOfPoints = endLineIndex.get(0);
+                tickIndex = (NumOfPoints*sliderValue)/space;
+                remainder = 0;
+            }else{
+                NumOfPoints = endLineIndex.get(lineNum) - endLineIndex.get(lineNum-1);
+                remainder = sliderValue%space;
+                tickIndex = endLineIndex.get(lineNum-1)+(NumOfPoints*remainder)/space;
+            }
+
+            System.out.println("# of points: "+NumOfPoints);
+            System.out.println("remainder: "+remainder);
+            System.out.println("tickIndex: "+tickIndex);
+            while(i < tickIndex) {
+                points.add(completePoints.get(i));
+                i++;
+            }
         }
+
 
         setChanged();
         notifyObservers();
@@ -222,6 +257,7 @@ public class Model extends Observable{
     ActionListener timerListener = new ActionListener(){
         public void actionPerformed(ActionEvent e) {
             System.out.println("timer action performed");
+
             if(counter < completePoints.size()){
                 System.out.println("counter: "+counter);
                 points.add(completePoints.get(counter));
