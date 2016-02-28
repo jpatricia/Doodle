@@ -10,7 +10,7 @@ import java.util.Observer;
 public class Playback extends JPanel implements Observer{
 
     private Model model;
-    private JSlider slider;
+    public JSlider slider;
     private JButton Play;
     private JButton End;
     private JButton Start;
@@ -22,6 +22,7 @@ public class Playback extends JPanel implements Observer{
 
         slider = new JSlider();
         slider.setValue(0);
+        slider.setMaximum(0);
         slider.addChangeListener(new BoundedChangeListener());
 
         Play = new JButton("Play");
@@ -97,19 +98,35 @@ public class Playback extends JPanel implements Observer{
     @Override
     public void paintComponent(Graphics g){
         //super.paintComponent(g);
-        System.out.println("in here playback paintcomponent: "+model.hm.size());
-        if(model.hm.size()!=0){
-            System.out.println("here");
+        System.out.println("playback paintcomponent: "+model.hm.size());
+        if(model.hm.size()!=0) {
+            System.out.println("setting up tick hm size!=0 playback paint");
+
             int mult = model.hm.size();
-            int tickspace = 100/mult;
+            int tickspace = 100 / mult;
+
+            System.out.println("mult: " + mult);
+            System.out.println("tickspace: " + tickspace);
+
             slider.setMaximum(100);
             slider.setMajorTickSpacing(tickspace);
-           // slider.setSnapToTicks(true);
-            slider.setPaintTicks(true);
-            if(model.maxTick){
+            if(model.newLine || model.hm.size()==1){
+                System.out.println("playback paint newline");
                 slider.setValue(100);
-                model.curSliderValue = 100;
             }
+            // slider.setSnapToTicks(true);
+            slider.setPaintTicks(true);
+//            System.out.println("maxTick: "+model.maxTick);
+//            if(model.maxTick){
+//                slider.setValue(100);
+//                model.curSliderValue = 100;
+//            }
+        }
+        else{
+            System.out.println("playback paint hm size=0");
+            slider.setMajorTickSpacing(0);
+            slider.setValue(0);
+            //slider.setPaintTicks(false);
         }
 
     }
@@ -121,9 +138,12 @@ public class Playback extends JPanel implements Observer{
             if(obj instanceof JSlider){
                 JSlider jslider = (JSlider) obj;
                 if(!jslider.getValueIsAdjusting()){
-                    model.getDrawing(jslider.getValue());
-                    model.curSliderValue = jslider.getValue();
-                    System.out.println("Slider changed: "+jslider.getValue());
+                    if(model.hm.size()!=0){
+                        model.getDrawing(jslider.getValue());
+                        model.curSliderValue = jslider.getValue();
+                        System.out.println("Slider changed: "+jslider.getValue());
+                    }
+
                 }
             }
 

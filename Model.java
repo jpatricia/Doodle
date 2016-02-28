@@ -14,14 +14,14 @@ public class Model extends Observable{
     Timer timer;
     int curSliderValue=100; //for play button timer
     private int counter=0;
-    boolean maxTick = true; //to see if it's on the maximum tick of jslider or not
+    boolean newLine = false; //to see if it's on the maximum tick of jslider or not
  //   Boolean chooseCol = false;
  //   Draw dr;
     //JPanel p;
     public ArrayList<Point> points = new ArrayList<Point>();
     public ArrayList<Point> hm = new ArrayList<Point>();
     public ArrayList<Color> colorTable = new ArrayList<Color>();
-    public ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
+    public ArrayList<Float> strokeTable = new ArrayList<Float>();
     public ArrayList<Point> completePoints = new ArrayList<Point>();
     public ArrayList<Integer> endLineIndex = new ArrayList<Integer>();
 
@@ -33,6 +33,7 @@ public class Model extends Observable{
         curStroke = new BasicStroke(1);
         setChanged();
         timer = new Timer((15),timerListener);
+
 //        p = new JPanel();
 //        p.setLayout(new BorderLayout());
 //        c = new Canvas(this,p);
@@ -90,6 +91,21 @@ public class Model extends Observable{
         counter = 0;
     }
 
+    public void createNew(){
+        System.out.println("CLEAR");
+        points.clear();
+        completePoints.clear();
+        hm.clear();
+        colorTable.clear();
+        strokeTable.clear();
+        endLineIndex.clear();
+        curSliderValue = 100;
+        newLine = false;
+
+        setChanged();
+        notifyObservers();
+    }
+
     public void changeStroke(BasicStroke st){
         //this method sets the stroke based on the button clicked
         System.out.println("changeStroke");
@@ -128,15 +144,82 @@ public class Model extends Observable{
     public void addStroke(BasicStroke newStroke){
         //this method will store the current stroke thickness information
        // System.out.println("addStroke: "+newStroke);
-        strokeTable.add(newStroke);
+        strokeTable.add(newStroke.getLineWidth());
     }
 
     public void addPoints(Point newPoint){
         //this method will add points to array when drawing
         //System.out.println("addPoints: "+newPoint);
 
+//        if(points.size() < completePoints.size()){
+//            //adding a new point in old drawing line
+//            //change the completePoints table to be the same as current table of points
+//
+//            System.out.println("points.size BEFORE: "+points.size());
+//            System.out.println("completePoint.size BEFORE: "+completePoints.size());
+//
+//            for(int i=completePoints.size()-1;i>=points.size();i--){
+//                completePoints.remove(i);
+//            }
+//
+//            System.out.println("points.size AFTER: "+points.size());
+//            System.out.println("completePoint.size AFTER: "+completePoints.size());
+//
+//            int NumOfPoints;
+//            int tickIndex;
+//            int remainder;
+//
+//            int space = 100/hm.size();
+//            int lineNum = curSliderValue/space;
+//            int sizeHM = hm.size();
+//
+//            if(lineNum < hm.size()) maxTick = false;
+//            else maxTick=true;
+//
+//            System.out.println("space: "+space);
+//            System.out.println("lineNum: "+lineNum);
+//            System.out.println("sizeHM: "+sizeHM);
+//
+//            if(curSliderValue<space){
+//                NumOfPoints = endLineIndex.get(0);
+//                tickIndex = (NumOfPoints*curSliderValue)/space;
+//                remainder = 0;
+//
+//            }else{
+//                NumOfPoints = endLineIndex.get(lineNum) - endLineIndex.get(lineNum-1);
+//                remainder = curSliderValue%space;
+//                tickIndex = endLineIndex.get(lineNum)-(NumOfPoints*remainder)/space;
+//            }
+//
+//            System.out.println("# of points: "+NumOfPoints);
+//            System.out.println("remainder: "+remainder);
+//            System.out.println("tickIndex: "+tickIndex);
+//
+//            //need to erase all the points after the tick on
+//            //hm table, endlineindex table, stroketable and colortable
+//
+//            System.out.println("hm.size: "+hm.size());
+//            System.out.println("endLineIndex.size: "+endLineIndex.size());
+//            System.out.println("strokeTable.size: "+strokeTable.size());
+//            System.out.println("colorTable.size: "+colorTable.size());
+//
+//            for(int i=sizeHM;i>lineNum;i--){
+//                hm.remove(i);
+//                endLineIndex.remove(i-1);
+//                strokeTable.remove(i);
+//                colorTable.remove(i);
+//            }
+//            hm.add(points.get(points.size()-1));
+//
+//            curSliderValue = 100; //change the tick slider to be 100
+//            maxTick = true;
+//        }
+
         points.add(newPoint);
         completePoints.add(newPoint);
+
+//        setChanged();
+//        notifyObservers();
 
     }
 
@@ -149,6 +232,7 @@ public class Model extends Observable{
     public void markEndLine(){
         //This has the index of the end of each line at completePoints array
         endLineIndex.add(points.size()-1);
+        newLine = true;
     }
 
     public ArrayList getPointsList(){
@@ -167,8 +251,54 @@ public class Model extends Observable{
         return hm;
     }
 
+    public ArrayList getCompletePoints(){ return completePoints;}
+
+    public ArrayList getEndLineIndex(){ return endLineIndex;}
+
+    public void setModel(ArrayList<Point> point, ArrayList<Point> hashmap,
+                         ArrayList<Color> colortable_,ArrayList<Float> stroketable_,
+                         ArrayList<Point> completePoint,ArrayList<Integer> endIndex){
+
+        points.clear();
+        hm.clear();
+        colorTable.clear();
+        strokeTable.clear();
+        completePoints.clear();
+        endLineIndex.clear();
+
+
+        for(int i=0;i<point.size();i++){
+            points.add(point.get(i));
+        }
+
+        for(int i=0;i<hashmap.size();i++){
+            hm.add(hashmap.get(i));
+        }
+
+        for(int i=0;i<colortable_.size();i++){
+            colorTable.add(colortable_.get(i));
+        }
+
+        for(int i=0;i<stroketable_.size();i++){
+            strokeTable.add(stroketable_.get(i));
+        }
+
+        for(int i=0;i<completePoint.size();i++){
+            completePoints.add(completePoint.get(i));
+        }
+
+        for(int i=0;i<endIndex.size();i++){
+            endLineIndex.add(endIndex.get(i));
+        }
+
+        setChanged();
+        notifyObservers();
+
+    }
+
     public void addTick(){
         System.out.println("addtick function");
+        System.out.println("maxTick in newline fn: "+newLine);
         setChanged();
         notifyObservers();
     }
@@ -176,19 +306,38 @@ public class Model extends Observable{
     public void getDrawing(int sliderValue){
         System.out.println("sliderValue: "+sliderValue);
 
-        points.clear();
-        int space = 100/hm.size();
-        int lineNum = sliderValue/space;
+        int space;
+        int lineNum;
         int i=0;
+//        if(hm.size()!=0){
+            space = 100/hm.size();
+            lineNum = sliderValue/space;
+//        }else{
+//            space =0;
+//            lineNum = 0;
+//        }
 
+        System.out.println("space get drawing: "+space);
+        System.out.println("lineNum get drawing: "+lineNum);
+        System.out.println("hm.size get drawing: "+hm.size());
 
-        if(lineNum < hm.size()) maxTick = false;
-        else maxTick=true;
+        if(sliderValue != 100){
+            System.out.println("getDrawing slidervalue not max");
+            newLine = false;
+        }
 
-        System.out.println("space: "+space);
-        System.out.println("lineNum: "+lineNum);
+//        if(lineNum < hm.size()) {
+//            System.out.println("maxtick is false");
+//            maxTick = false;
+//        }
+//        else {
+//            System.out.println("maxtick is true");
+//            maxTick=true;
+//        }
+
 
         if(sliderValue%space ==0 || sliderValue ==100){
+            points.clear();
             //the arrow is on the tick
             System.out.println("arrow is on the tick");
 
@@ -242,10 +391,25 @@ public class Model extends Observable{
             System.out.println("# of points: "+NumOfPoints);
             System.out.println("remainder: "+remainder);
             System.out.println("tickIndex: "+tickIndex);
-            while(i < tickIndex) {
-                points.add(completePoints.get(i));
-                i++;
+            if(tickIndex>points.size()){
+                //move forward
+                i=points.size();
+                System.out.println("FORWARD");
+                while(i <= tickIndex) {
+                    points.add(completePoints.get(i));
+                    i++;
+                }
+            }else{
+                //move back or rewind
+                System.out.println("REWIND");
+                int j = points.size()-1;
+                while(j>=tickIndex){
+                    points.remove(j);
+                    j--;
+                }
+
             }
+
         }
 
 

@@ -40,7 +40,7 @@ class Canvas extends JPanel implements Observer {
 
         this.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
-                System.out.println("mouse released");
+                System.out.println("mouse released------------");
                 model.addTick();
                 model.markEndLine();
             }
@@ -59,7 +59,7 @@ class Canvas extends JPanel implements Observer {
         ArrayList<Point> points = new ArrayList<Point>();
         ArrayList<Point> hm = new ArrayList<Point>();
         ArrayList<Color> colorTable = new ArrayList<Color>();
-        ArrayList<BasicStroke> strokeTable = new ArrayList<BasicStroke>();
+        ArrayList<Float> strokeTable = new ArrayList<Float>();
 
         points = model.getPointsList();
         hm = model.getCheckStart();
@@ -73,7 +73,7 @@ class Canvas extends JPanel implements Observer {
         for (int j = 0; j <= points.size() - 2; j++) {
             Point p1 = points.get(j);
             Point p2 = points.get(j + 1);
-            g2_.setStroke(strokeTable.get(i));
+            g2_.setStroke(new BasicStroke(strokeTable.get(i)));
             g2_.setPaint(colorTable.get(i));
             if (hm.contains(p2)) { //p2 is a new line
                 i++;
