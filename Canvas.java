@@ -28,21 +28,34 @@ class Canvas extends JPanel implements Observer {
                 model.addPoints(me.getPoint());
                 model.addCheckStart(me.getPoint());
             }
+
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("mouse released------------");
+                model.addTick();
+                model.markEndLine();
+            }
+
+//            public void mouseClicked(MouseEvent e){
+//                System.out.println("mouse clicked");
+////                System.out.println("curColor1: "+model.curColor);
+////                System.out.println("curStroke1: "+model.curStroke);
+//
+//                //add color and stroke to table
+//                model.addStroke(model.curStroke);
+//                model.addColor(model.curColor);
+//
+//                //add point to table and mark as start of line
+//                model.addPoints(e.getPoint());
+//                model.addCheckStart(e.getPoint());
+//            }
         });
+
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent me) {
                 //add point to the table
                 model.addPoints(me.getPoint());
                 repaint();
-            }
-        });
-
-        this.addMouseListener(new MouseAdapter() {
-            public void mouseReleased(MouseEvent e) {
-                System.out.println("mouse released------------");
-                model.addTick();
-                model.markEndLine();
             }
         });
 
@@ -66,6 +79,10 @@ class Canvas extends JPanel implements Observer {
         colorTable = model.getColor();
         strokeTable = model.getStroke();
 
+        System.out.println("canvas scaleX: "+model.scaleX);
+        System.out.println("canvas scaleY: "+model.scaleY);
+
+        g2_.scale(model.scaleX,model.scaleY);
 
         g2_.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

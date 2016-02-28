@@ -19,6 +19,8 @@ public class Model extends Observable{
     boolean playforward = true;
     Boolean chooseCol = false;
     Boolean colorCustom = false;
+    double scaleX=1.0,scaleY=1.0;
+    Boolean fitMenu = false; //default is full screen size
  //   Draw dr;
     //JPanel p;
     public ArrayList<Point> points = new ArrayList<Point>();
@@ -254,6 +256,44 @@ public class Model extends Observable{
     public void addTick(){
         System.out.println("addtick function");
         System.out.println("maxTick in newline fn: "+newLine);
+        setChanged();
+        notifyObservers();
+    }
+
+//    public void SetFit(){
+//        System.out.println("set fit");
+//        fitMenu = true;
+//    }
+
+    public void fit(int width, int height){
+        //width and height are the width and height of the window
+
+        System.out.println("window width: "+width);
+        System.out.println("window height: "+height);
+
+        fitMenu = true;
+
+        if(width !=800){
+            scaleX = ((double)width)/800;
+        }
+        if(height!=600){
+            scaleY = ((double)height)/600;
+        }
+
+        System.out.println("scaleX: "+scaleX);
+        System.out.println("scaleY: "+scaleY);
+
+        setChanged();
+        notifyObservers();
+
+    }
+
+    public void full(){
+        System.out.println("set full");
+        fitMenu = false;
+        scaleX = 1.0;
+        scaleY = 1.0;
+
         setChanged();
         notifyObservers();
     }

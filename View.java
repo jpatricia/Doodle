@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -11,21 +13,29 @@ class View extends JPanel{
     public Canvas c;
     public Palette pal;
     public Playback pc;
+    private JPanel p;
+    private JScrollPane scrollpane;
 
     public View(Model model_){
         model = model_;
 
         JMenuBar jmb;
-        JPanel p = new JPanel(new BorderLayout());
+        p = new JPanel(new BorderLayout());
         c = new Canvas(model);
         pal = new Palette(model);
         pc = new Playback(model);
 
+        scrollpane = new JScrollPane(c);
+        scrollpane.setPreferredSize(new Dimension(500,500));
+        c.setPreferredSize(new Dimension(800,600));
+
+        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         ////////// MENU BAR //////////
         f = new JFrame("Doodle"); //create a window
         f.getContentPane().setLayout(new BorderLayout());
-        f.setSize(800,600);
+        f.setSize(1000,700);
 
         //Set menu bar
         jmb = MenuBar();
@@ -35,7 +45,7 @@ class View extends JPanel{
         f.getContentPane().add(p);
 
         //add canvas
-        p.add(c,BorderLayout.CENTER);
+        p.add(scrollpane,BorderLayout.CENTER);
 
         //add palette
         p.add(pal,BorderLayout.WEST);
@@ -147,6 +157,49 @@ class View extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
+        });
+
+        Fit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               // model.SetFit();
+                model.fit(f.getWidth(),f.getHeight());
+            }
+        });
+
+        Full.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.full();
+            }
+        });
+
+        f.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                System.out.println("window width: "+ f.getWidth());
+                System.out.println("Window Height: "+f.getHeight());
+                if(model.fitMenu){
+                    System.out.println("fit resize");
+                    //currently on fit size mode
+                    model.fit(f.getWidth(),f.getHeight());
+                }else{
+//                    if(f.getWidth() <= 450){
+//                        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//                    }
+//                    if(f.getHeight() <= 450){
+//                        scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//                    }
+                    model.full();
+                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {}
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
         });
 
         return jmb;
