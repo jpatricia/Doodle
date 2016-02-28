@@ -14,6 +14,7 @@ public class Playback extends JPanel implements Observer{
     private JButton Play;
     private JButton End;
     private JButton Start;
+    private JButton Rewind;
 
     public Playback(Model model_){
         model = model_;
@@ -28,11 +29,13 @@ public class Playback extends JPanel implements Observer{
         Play = new JButton("Play");
         End = new JButton("End");
         Start = new JButton("Start");
+        Rewind = new JButton("Playback");
 
         Play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 model.points.clear(); //clear the table of points
                 System.out.println("size of points: "+model.points.size());
+                model.playforward = true;
                 model.start(); //start the timer
               //  slider.setValue(0);
             }
@@ -54,6 +57,14 @@ public class Playback extends JPanel implements Observer{
             }
         });
 
+        Rewind.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Playback button");
+                model.playforward = false;
+                model.start();
+            }
+        });
+
         addComponents();
 
         this.setBackground(Color.LIGHT_GRAY);
@@ -71,6 +82,13 @@ public class Playback extends JPanel implements Observer{
         gc.gridy = 0;
         gc.anchor = GridBagConstraints.WEST;
         this.add(Play,gc);
+        gc.gridx++;
+
+        //add playback button
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+        gc.anchor = GridBagConstraints.WEST;
+        this.add(Rewind,gc);
         gc.gridx++;
 
         //add slider
@@ -128,6 +146,7 @@ public class Playback extends JPanel implements Observer{
             slider.setValue(0);
             //slider.setPaintTicks(false);
         }
+
 
     }
 

@@ -14,7 +14,9 @@ public class Model extends Observable{
     Timer timer;
     int curSliderValue=100; //for play button timer
     private int counter=0;
+    private int counter1=0;
     boolean newLine = false; //to see if it's on the maximum tick of jslider or not
+    boolean playforward = true;
  //   Boolean chooseCol = false;
  //   Draw dr;
     //JPanel p;
@@ -89,6 +91,7 @@ public class Model extends Observable{
         System.out.println("///////Start timer///////");
         timer.start();
         counter = 0;
+        counter1 = completePoints.size()-1;
     }
 
     public void createNew(){
@@ -151,75 +154,21 @@ public class Model extends Observable{
         //this method will add points to array when drawing
         //System.out.println("addPoints: "+newPoint);
 
-//        if(points.size() < completePoints.size()){
-//            //adding a new point in old drawing line
-//            //change the completePoints table to be the same as current table of points
-//
-//            System.out.println("points.size BEFORE: "+points.size());
-//            System.out.println("completePoint.size BEFORE: "+completePoints.size());
-//
-//            for(int i=completePoints.size()-1;i>=points.size();i--){
-//                completePoints.remove(i);
-//            }
-//
-//            System.out.println("points.size AFTER: "+points.size());
-//            System.out.println("completePoint.size AFTER: "+completePoints.size());
-//
-//            int NumOfPoints;
-//            int tickIndex;
-//            int remainder;
-//
-//            int space = 100/hm.size();
-//            int lineNum = curSliderValue/space;
-//            int sizeHM = hm.size();
-//
-//            if(lineNum < hm.size()) maxTick = false;
-//            else maxTick=true;
-//
-//            System.out.println("space: "+space);
-//            System.out.println("lineNum: "+lineNum);
-//            System.out.println("sizeHM: "+sizeHM);
-//
-//            if(curSliderValue<space){
-//                NumOfPoints = endLineIndex.get(0);
-//                tickIndex = (NumOfPoints*curSliderValue)/space;
-//                remainder = 0;
-//
-//            }else{
-//                NumOfPoints = endLineIndex.get(lineNum) - endLineIndex.get(lineNum-1);
-//                remainder = curSliderValue%space;
-//                tickIndex = endLineIndex.get(lineNum)-(NumOfPoints*remainder)/space;
-//            }
-//
-//            System.out.println("# of points: "+NumOfPoints);
-//            System.out.println("remainder: "+remainder);
-//            System.out.println("tickIndex: "+tickIndex);
-//
-//            //need to erase all the points after the tick on
-//            //hm table, endlineindex table, stroketable and colortable
-//
-//            System.out.println("hm.size: "+hm.size());
-//            System.out.println("endLineIndex.size: "+endLineIndex.size());
-//            System.out.println("strokeTable.size: "+strokeTable.size());
-//            System.out.println("colorTable.size: "+colorTable.size());
-//
-//            for(int i=sizeHM;i>lineNum;i--){
-//                hm.remove(i);
-//                endLineIndex.remove(i-1);
-//                strokeTable.remove(i);
-//                colorTable.remove(i);
-//            }
-//            hm.add(points.get(points.size()-1));
-//
-//            curSliderValue = 100; //change the tick slider to be 100
-//            maxTick = true;
-//        }
+        if(points.size()< completePoints.size()){
+            System.out.println("------ draw in between ------");
+
+            //change completePoints to be the same as points
+            for(int i=completePoints.size()-1;i>=points.size();i--){
+                completePoints.remove(i);
+            }
+
+        }
 
         points.add(newPoint);
         completePoints.add(newPoint);
 
-//        setChanged();
-//        notifyObservers();
+        setChanged();
+        notifyObservers();
 
     }
 
@@ -422,13 +371,26 @@ public class Model extends Observable{
         public void actionPerformed(ActionEvent e) {
             System.out.println("timer action performed");
 
-            if(counter < completePoints.size()){
-                System.out.println("counter: "+counter);
-                points.add(completePoints.get(counter));
-                counter++;
+            if(playforward){
+                if(counter < completePoints.size()){
+                    System.out.println("counter: "+counter);
+                    points.add(completePoints.get(counter));
+                    counter++;
+                }else{
+                    timer.stop();
+                }
             }else{
-                timer.stop();
+                if(counter1 >= 0){
+                    points.remove(counter1);
+                    counter1--;
+                }else{
+                    timer.stop();
+                    for(int i=0;i<completePoints.size();i++){
+                        points.add(completePoints.get(i));
+                    }
+                }
             }
+
             setChanged();
             notifyObservers();
         }};
