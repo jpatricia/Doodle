@@ -12,6 +12,7 @@ public class Palette extends JPanel implements Observer{
     private JPanel vi;
     private JPanel pBottom;
     private JButton choose;
+    private JButton custom;
 //    private Draw draw_;
 
     public Palette(Model model_){
@@ -23,7 +24,7 @@ public class Palette extends JPanel implements Observer{
 
         // Set the layout strategy to a grid with 2 rows and 3 columns.
         p.setLayout(new BorderLayout());
-        pTop.setLayout(new GridLayout(8, 2)); //color palette
+        pTop.setLayout(new GridLayout(9, 2)); //color palette
         pBottom.setLayout(new GridLayout(5,1)); //stroke palette
 
         colorPalette();
@@ -81,7 +82,8 @@ public class Palette extends JPanel implements Observer{
         JButton ten = new JButton();
         JButton eleven = new JButton();
         JButton twelve = new JButton();
-        choose = new JButton("Choose Color");
+        choose = new JButton("Pick Color");
+        custom = new JButton("");
 
         one.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -148,6 +150,12 @@ public class Palette extends JPanel implements Observer{
                 model.colorChooser();
             }
         });
+        custom.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                model.colorCustom = true;
+                model.colorChooser();
+            }
+        });
 
 
         one.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
@@ -163,6 +171,7 @@ public class Palette extends JPanel implements Observer{
         eleven.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
         twelve.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
         choose.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
+        custom.setBorder(BorderFactory.createLineBorder(Color.WHITE,2));
 
 
         //Set the color for each color palette
@@ -179,6 +188,7 @@ public class Palette extends JPanel implements Observer{
         eleven.setBackground(Color.PINK);
         twelve.setBackground(Color.RED);
         choose.setBackground(Color.LIGHT_GRAY);
+        custom.setBackground(Color.LIGHT_GRAY);
 
 //        one.setForeground(Color.BLACK);
 //        two.setForeground(Color.WHITE);
@@ -208,6 +218,7 @@ public class Palette extends JPanel implements Observer{
         eleven.setOpaque(true);
         twelve.setOpaque(true);
         choose.setOpaque(true);
+        custom.setOpaque(true);
 
 
         // Add the components.
@@ -224,6 +235,7 @@ public class Palette extends JPanel implements Observer{
         pTop.add(eleven);
         pTop.add(twelve);
         pTop.add(choose);
+        pTop.add(custom);
 
     }
 
@@ -349,12 +361,23 @@ public class Palette extends JPanel implements Observer{
     public void update(Observable arg0, Object arg1){
         System.out.println("update palette");
 
-//        if(model.chooseCol){ //never set up color
-//            System.out.println("color chosen: "+model.curColor);
-//            choose.setBackground(model.curColor);
-//            choose.setOpaque(true);
-//            pTop.add(choose);
-//            repaint();
-//        }
+        if(model.chooseCol){ //use color picker
+            if(model.colorCustom){
+                //custom color button for bonus marks
+                System.out.println("color chosen custom color: "+model.curColor);
+                custom.setBackground(model.curColor);
+                custom.setOpaque(true);
+                pTop.add(custom);
+                model.chooseColDone();
+            }else{
+                //pick color button
+                System.out.println("color chosen pick color: "+model.curColor);
+                choose.setBackground(model.curColor);
+                choose.setOpaque(true);
+                pTop.add(choose);
+                model.chooseColDone();
+            }
+
+        }
     }
 }

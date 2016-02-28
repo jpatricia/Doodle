@@ -17,7 +17,8 @@ public class Model extends Observable{
     private int counter1=0;
     boolean newLine = false; //to see if it's on the maximum tick of jslider or not
     boolean playforward = true;
- //   Boolean chooseCol = false;
+    Boolean chooseCol = false;
+    Boolean colorCustom = false;
  //   Draw dr;
     //JPanel p;
     public ArrayList<Point> points = new ArrayList<Point>();
@@ -133,9 +134,14 @@ public class Model extends Observable{
         System.out.println("curColor: "+curColor);
 //        p.setOpaque(true);
 
-//        chooseCol = true;
-//        setChanged();
-//        notifyObservers();
+        chooseCol = true;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void chooseColDone(){
+        chooseCol = false;
+        colorCustom = false;
     }
 
     public void addColor(Color newColor){
