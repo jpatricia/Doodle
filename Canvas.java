@@ -27,6 +27,7 @@ class Canvas extends JPanel implements Observer {
                 //add point to table and mark as start of line
                 model.addPoints(me.getPoint());
                 model.addCheckStart(me.getPoint());
+
             }
 
             public void mouseReleased(MouseEvent e) {

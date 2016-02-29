@@ -273,10 +273,10 @@ public class Model extends Observable{
 
         fitMenu = true;
 
-        if(width !=800){
+        if(width !=1000){
             scaleX = ((double)width)/800;
         }
-        if(height!=600){
+        if(height!=700){
             scaleY = ((double)height)/600;
         }
 

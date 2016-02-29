@@ -181,6 +181,8 @@ class View extends JPanel{
                     System.out.println("fit resize");
                     //currently on fit size mode
                     model.fit(f.getWidth(),f.getHeight());
+                    scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+                    scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 }else{
 //                    if(f.getWidth() <= 450){
 //                        scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
